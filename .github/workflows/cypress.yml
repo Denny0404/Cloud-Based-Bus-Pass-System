@@ -19,15 +19,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-
+          
       - name: Install Dependencies
-        run: npm install
+        run: npm cypress install
 
-      - name: Install Cypress
-        run: npx cypress install
-
-      - name: Set Cypress Permissions
-        run: chmod +x node_modules/.bin/cypress
+      - name: Fix Cypress Permissions
+        run: |
+          npx cypress install
+          chmod +x node_modules/.bin/cypress
 
       - name: Verify Cypress Installation
         run: npx cypress --version
