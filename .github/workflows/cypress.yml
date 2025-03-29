@@ -24,23 +24,24 @@ jobs:
       - name: Install Dependencies
         run: npm ci  # Clean install for consistency
 
-      - name: Install `wait-on`
-        run: npm install -g wait-on
-
       - name: Install Apache & MySQL (XAMPP Alternative)
         run: |
           sudo apt update
           sudo apt install -y apache2 mysql-server php libapache2-mod-php php-mysql
           sudo systemctl start apache2
           sudo systemctl enable apache2
+          sudo systemctl status apache2 || true  # Show Apache status for debugging
           sudo systemctl start mysql
           sudo systemctl enable mysql
+
+      - name: Verify Apache is Running
+        run: curl -I http://localhost || (echo "Apache failed to start" && exit 1)
 
       - name: Ensure Reports Directory Exists
         run: mkdir -p cypress/reports
 
       - name: Wait for Apache to Start
-        run: wait-on http://localhost:8080/busspasssystem --timeout 60000
+        run: npx wait-on http://localhost:8080/busspasssystem --timeout 60000 || (echo "Server did not start" && exit 1)
 
       - name: Run Cypress Tests
         run: npm run test
