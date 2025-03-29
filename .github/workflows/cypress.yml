@@ -21,16 +21,13 @@ jobs:
           node-version: '18'
 
       - name: Install Dependencies
-        run: npm ci  # Use npm ci for a clean install
+        run: npm ci  # Ensure a clean install of dependencies
 
-      - name: Install Cypress
-        run: npx cypress install || echo "Cypress already installed"
+      - name: Start Web Server
+        run: npm start &  # Start the application in the background
 
-      - name: Set Correct Permissions
-        run: sudo chmod -R 777 $(npm root -g)/cypress || true
-
-      - name: Verify Cypress Installation
-        run: npx cypress --version
+      - name: Wait for Server to Start
+        run: sleep 10  # Adjust this delay if needed
 
       - name: Run Cypress Tests
         run: npm run test
