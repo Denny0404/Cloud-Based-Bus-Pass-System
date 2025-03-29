@@ -2,6 +2,7 @@ const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
   e2e: {
+    baseUrl: "http://localhost",
     video: true,
     reporter: "mochawesome",
     reporterOptions: {
