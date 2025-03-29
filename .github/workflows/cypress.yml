@@ -1,0 +1,46 @@
+name: Run Cypress Tests on Windows
+
+on:
+  push:
+    branches:
+      - development
+  pull_request:
+
+jobs:
+  cypress-run:
+    runs-on: windows-latest  # Use Windows OS
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install Google Chrome
+        run: choco install googlechrome --no-progress
+
+      - name: Cache Cypress Binary
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/Cypress
+          key: ${{ runner.os }}-cypress-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-cypress-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Verify Cypress Installation
+        run: npx cypress verify
+
+      - name: Run Cypress Tests in Chrome (Headless)
+        run: npx cypress run --browser chrome --headless --reporter mochawesome
+
+      - name: Upload Mocha Reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-mocha-reports
+          path: cypress/reports/
