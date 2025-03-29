@@ -1,0 +1,143 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 3,
+    "passes": 3,
+    "pending": 0,
+    "failures": 0,
+    "start": "2025-03-29T18:28:01.811Z",
+    "end": "2025-03-29T18:28:26.807Z",
+    "duration": 24996,
+    "testsRegistered": 3,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "a5926f1e-d7a4-46aa-b2f7-693931540875",
+      "title": "",
+      "fullFile": "cypress\\e2e\\test\\busPass.cy.js",
+      "file": "cypress\\e2e\\test\\busPass.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "c5620aad-fa58-4b6c-8dbe-d26831f44bff",
+          "title": "template spec",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Booking bus pass",
+              "fullTitle": "template spec Booking bus pass",
+              "timedOut": null,
+              "duration": 8688,
+              "state": "passed",
+              "speed": "medium",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const nameGenerator = new Data();\nconst name = nameGenerator.generate();\nconst numberGenerator = new Data('number', 10);\nconst phoneNumber = numberGenerator.generate();\ncy.visit('http://localhost/busspasssystem/index.html');\n// home page\ncy.contains('Book Now!').click();\n// customer details\ncy.get('[id=\"name\"]').type(name);\ncy.get('[id=\"email\"]').type(name + '@testing.com');\ncy.get('[id=\"number\"]').type(phoneNumber);\ncy.get('[type=\"password\"]').type(phoneNumber);\ncy.get('[id=\"date\"]').type('2025-05-05');\ncy.get('[name=\"dest\"]').select('Brampton');\ncy.get('[type=\"submit\"]').click();\n//payment details\ncy.get('[name=\"cardname\"]').clear().type(name);\ncy.get('[id=\"ccnum\"]').type('4556-5565-5544-5456');\ncy.get('[id=\"expmonth\"]').type('08');\ncy.get('[id=\"expyear\"]').type('2028');\ncy.get('[id=\"cvv\"]').type('202');\ncy.get('[type=\"submit\"]').click();\n//pass details\ncy.get('.mb-4').eq(0).invoke('text').then(text => {\n  cy.log('Captured ID:', text.trim()); // Debug log\n  cy.wrap(text.trim()).as('storedID'); // Store it as an alias\n});\n// Home page for validation\ncy.visit('http://localhost/busspasssystem/index.html');\ncy.viewport('macbook-16');\n// Click 'Manage Pass' and ensure it worked\ncy.get('[role=\"navigation\"]').contains('Manage Pass').click({\n  force: true\n});\n// Retrieve the stored ID and type it\ncy.get('@storedID').then(storedID => {\n  cy.log('Stored ID to be entered:', storedID); // Debug log\n  cy.get('[id=\"pass_id\"]').eq(0).should('be.visible').type(storedID.trim(), {\n    delay: 100\n  });\n});\ncy.get('[id=\"pass_id\"]').eq(1).type(phoneNumber);\ncy.get('[type=\"submit\"]').eq(0).click();",
+              "err": {},
+              "uuid": "2f3d1fe8-aab7-4b68-b0a8-e15c9ca865a4",
+              "parentUUID": "c5620aad-fa58-4b6c-8dbe-d26831f44bff",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Booking bus pass and renew bus pass",
+              "fullTitle": "template spec Booking bus pass and renew bus pass",
+              "timedOut": null,
+              "duration": 8239,
+              "state": "passed",
+              "speed": "medium",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const nameGenerator = new Data();\nconst name = nameGenerator.generate();\nconst numberGenerator = new Data('number', 10);\nconst phoneNumber = numberGenerator.generate();\ncy.visit('http://localhost/busspasssystem/index.html');\n// home page\ncy.contains('Book Now!').click();\n// customer details\ncy.get('[id=\"name\"]').type(name);\ncy.get('[id=\"email\"]').type(name + '@testing.com');\ncy.get('[id=\"number\"]').type(phoneNumber);\ncy.get('[type=\"password\"]').type(phoneNumber);\ncy.get('[id=\"date\"]').type('2025-05-05');\ncy.get('[name=\"dest\"]').select('Brampton');\ncy.get('[type=\"submit\"]').click();\n//payment details\ncy.get('[name=\"cardname\"]').clear().type(name);\ncy.get('[id=\"ccnum\"]').type('4556-5565-5544-5456');\ncy.get('[id=\"expmonth\"]').type('08');\ncy.get('[id=\"expyear\"]').type('2028');\ncy.get('[id=\"cvv\"]').type('202');\ncy.get('[type=\"submit\"]').click();\n//pass details\ncy.get('.mb-4').eq(0).invoke('text').then(text => {\n  cy.log('Captured ID:', text.trim()); // Debug log\n  cy.wrap(text.trim()).as('storedID'); // Store it as an alias\n});\n// Home page for validation\ncy.visit('http://localhost/busspasssystem/index.html');\ncy.viewport('macbook-16');\n// Click 'Manage Pass' and ensure it worked\ncy.get('[role=\"navigation\"]').contains('Manage Pass').click({\n  force: true\n});\n// Retrieve the stored ID and type it\ncy.get('@storedID').then(storedID => {\n  cy.log('Stored ID to be entered:', storedID); // Debug log\n  cy.get('[id=\"pass_id\"]').eq(0).should('be.visible').type(storedID.trim(), {\n    delay: 100\n  });\n});\ncy.get('[id=\"pass_id\"]').eq(1).type(phoneNumber);\ncy.get('[type=\"submit\"]').eq(0).click();\n// pass renew details\ncy.get('[type=\"date\"]').type('2025-06-05');\ncy.get('[type=\"submit\"]').eq(1).click();\n//payment details\ncy.get('[name=\"cardname\"]').clear().type(name);\ncy.get('[id=\"ccnum\"]').type('4556-5565-5544-5456');\ncy.get('[id=\"expmonth\"]').type('08');\ncy.get('[id=\"expyear\"]').type('2028');\ncy.get('[id=\"cvv\"]').type('202');\ncy.get('[type=\"submit\"]').click();\n// Home page for validation\ncy.visit('http://localhost/busspasssystem/index.html');\ncy.viewport('macbook-16');\n// Click 'Manage Pass' and ensure it worked\ncy.get('[role=\"navigation\"]').contains('Manage Pass').click({\n  force: true\n});\n// Retrieve the stored ID and type it\ncy.get('@storedID').then(storedID => {\n  cy.log('Stored ID to be entered:', storedID); // Debug log\n  cy.get('[id=\"pass_id\"]').eq(0).should('be.visible').type(storedID.trim(), {\n    delay: 100\n  });\n});\ncy.get('[id=\"pass_id\"]').eq(1).type(phoneNumber);\ncy.get('[type=\"submit\"]').eq(0).click();",
+              "err": {},
+              "uuid": "04221141-10da-4635-88f1-54dfb7919488",
+              "parentUUID": "c5620aad-fa58-4b6c-8dbe-d26831f44bff",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Booking pass and suspend bus pass",
+              "fullTitle": "template spec Booking pass and suspend bus pass",
+              "timedOut": null,
+              "duration": 5585,
+              "state": "passed",
+              "speed": "medium",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const nameGenerator = new Data();\nconst name = nameGenerator.generate();\nconst numberGenerator = new Data('number', 10);\nconst phoneNumber = numberGenerator.generate();\ncy.visit('http://localhost/busspasssystem/index.html');\n// home page\ncy.contains('Book Now!').click();\n// customer details\ncy.get('[id=\"name\"]').type(name);\ncy.get('[id=\"email\"]').type(name + '@testing.com');\ncy.get('[id=\"number\"]').type(phoneNumber);\ncy.get('[type=\"password\"]').type(phoneNumber);\ncy.get('[id=\"date\"]').type('2025-05-05');\ncy.get('[name=\"dest\"]').select('Brampton');\ncy.get('[type=\"submit\"]').click();\n//payment details\ncy.get('[name=\"cardname\"]').clear().type(name);\ncy.get('[id=\"ccnum\"]').type('4556-5565-5544-5456');\ncy.get('[id=\"expmonth\"]').type('08');\ncy.get('[id=\"expyear\"]').type('2028');\ncy.get('[id=\"cvv\"]').type('202');\ncy.get('[type=\"submit\"]').click();\n//pass details\ncy.get('.mb-4').eq(0).invoke('text').then(text => {\n  cy.log('Captured ID:', text.trim()); // Debug log\n  cy.wrap(text.trim()).as('storedID'); // Store it as an alias\n});\n// Home page for validation\ncy.visit('http://localhost/busspasssystem/index.html');\ncy.viewport('macbook-16');\n// Click 'Manage Pass' and ensure it worked\ncy.get('[role=\"navigation\"]').contains('Manage Pass').click({\n  force: true\n});\n// Retrieve the stored ID and type it\ncy.get('@storedID').then(storedID => {\n  cy.log('Stored ID to be entered:', storedID); // Debug log\n  cy.get('[id=\"pass_id\"]').eq(0).should('be.visible').type(storedID.trim(), {\n    delay: 100\n  });\n});\ncy.get('[id=\"pass_id\"]').eq(1).type(phoneNumber);\ncy.get('[type=\"submit\"]').eq(0).click();\n//// pass suspend details\ncy.get('[type=\"submit\"]').eq(2).click();\n//click home button\ncy.get('[type=\"submit\"]').eq(0).click();",
+              "err": {},
+              "uuid": "c8bc1d26-63be-479d-99f5-7a4ba8cd3c6b",
+              "parentUUID": "c5620aad-fa58-4b6c-8dbe-d26831f44bff",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "2f3d1fe8-aab7-4b68-b0a8-e15c9ca865a4",
+            "04221141-10da-4635-88f1-54dfb7919488",
+            "c8bc1d26-63be-479d-99f5-7a4ba8cd3c6b"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 22512,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports",
+        "overwrite": true,
+        "html": true,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

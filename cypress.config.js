@@ -3,8 +3,15 @@ const { defineConfig } = require("cypress");
 module.exports = defineConfig({
   e2e: {
     video: true,
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
+    reporter: "mochawesome",
+    reporterOptions: {
+      reportDir: "cypress/reports",
+      overwrite: true,
+      html: true,
+      json: true
     },
-  },
+    setupNodeEvents(on, config) {
+      // Implement node event listeners here
+    }
+  }
 });
