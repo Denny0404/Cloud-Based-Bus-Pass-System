@@ -22,12 +22,15 @@ jobs:
           node-version: '18'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Install Cypress and Set Permissions
+      - name: Install Cypress with Correct Permissions
         run: |
-          npx cypress install
-          chmod +x node_modules/.bin/cypress
+          npx cypress install || true
+          chmod +x node_modules/.bin/cypress || true
+
+      - name: Verify Cypress Installation
+        run: npx cypress --version
 
       - name: Start Local Server
         run: npm start &
@@ -42,7 +45,7 @@ jobs:
         run: npm run cypress:report
 
       - name: Upload Test Artifacts (Mochawesome Report)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: mochawesome-report
           path: cypress/reports
