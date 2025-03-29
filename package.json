@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "cypress:open": "npx cypress open",
+    "cypress:run": "cypress run",
+    "test": "npx cypress run --browser chrome --spec \"cypress/e2e/test/busPass.cy.js\""
+  },
+  "devDependencies": {
+    "cypress": "^14.2.1"
+  }
+}
