@@ -21,12 +21,13 @@ jobs:
           node-version: '18'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci  # Use npm ci for a clean install
 
-      - name: Fix Cypress Permissions
-        run: |
-          npx cypress install
-          chmod +x node_modules/.bin/cypress
+      - name: Install Cypress
+        run: npx cypress install || echo "Cypress already installed"
+
+      - name: Set Correct Permissions
+        run: sudo chmod -R 777 $(npm root -g)/cypress || true
 
       - name: Verify Cypress Installation
         run: npx cypress --version
