@@ -9,43 +9,31 @@ on:
       - development
 
 jobs:
-  cypress-test:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: 20
 
-      - name: Install Dependencies
+      - name: Install dependencies
+        run: |
+          cd src
+          npm install
+
+      - name: Install dependencies
         run: npm ci
 
-      - name: Install Cypress with Correct Permissions
-        run: |
-          npx cypress install || true
-          chmod +x node_modules/.bin/cypress || true
+      - name: Fix react-scripts Permissions
+        run: chmod +x node_modules/.bin/react-scripts
 
-      - name: Verify Cypress Installation
-        run: npx cypress --version
+      - name: Install Testing Library Dependencies
+        run: npm install --save-dev @testing-library/react @testing-library/jest-dom @testing-library/user-event
 
-      - name: Start Local Server
-        run: npm start &
-
-      - name: Wait for Server to Start
-        run: npx wait-on http://localhost:8080
-
-      - name: Run Cypress Tests
-        run: npm test
-
-      - name: Generate Test Report
-        run: npm run cypress:report
-
-      - name: Upload Test Artifacts (Mochawesome Report)
-        uses: actions/upload-artifact@v3
-        with:
-          name: mochawesome-report
-          path: cypress/reports
+      - name: Run Tests
+        run: npm test -- --watchAll=false
