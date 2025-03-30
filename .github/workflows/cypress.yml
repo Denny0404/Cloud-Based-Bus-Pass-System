@@ -18,18 +18,13 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.2'  # Ensure this matches your local PHP version
 
       - name: Start PHP Server
-        run: |
-          php -S 0.0.0.0:8080 -t busspasssystem > server.log 2>&1 &
-          sleep 5  # Allow time for the server to start
-
-      - name: Debug: Check If PHP Server Started
-        run: curl -I http://localhost:8080 || (echo "PHP server failed to start" && cat server.log && exit 1)
-
+        run: php -S localhost:8080 -t busspasssystem &
+      
       - name: Wait for Server to be Ready
-        run: npx wait-on tcp:localhost:8080 --timeout 60000 || (echo "Server did not start in time" && exit 1)
+        run: npx wait-on http://localhost:8080 --timeout 60000 || (echo "Server did not start in time" && exit 1)
 
       - name: Install Node.js
         uses: actions/setup-node@v3
