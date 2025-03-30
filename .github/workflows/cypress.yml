@@ -21,7 +21,7 @@ jobs:
           php-version: '8.2'  # Ensure this matches your local PHP version
 
       - name: Verify busspasssystem Directory Exists
-        run: ls -lah busspasssystem || (echo "ERROR: busspasssystem folder missing!" && exit 1)
+        run: ls -lah busspasssystem || (echo "ERROR busspasssystem folder missing!" && exit 1)
 
       - name: Start PHP Server
         run: |
@@ -30,7 +30,7 @@ jobs:
           curl -I http://localhost:8080/busspasssystem/index.html || (echo "ERROR: PHP server failed to start!" && cat server.log && exit 1)
 
       - name: Wait for Server to be Ready
-        run: npx wait-on http://localhost:8080/busspasssystem/index.html --timeout 60000 || (echo "ERROR: Server did not start in time!" && exit 1)
+        run: npx wait-on http://localhost:8080/busspasssystem/index.html --timeout 60000 || (echo "ERROR Server did not start in time!" && exit 1)
 
       - name: Install Node.js
         uses: actions/setup-node@v3
@@ -44,4 +44,4 @@ jobs:
         run: npx cypress install || echo "Cypress already installed"
 
       - name: Run Cypress Tests
-        run: npm run test || (echo "ERROR: Cypress Tests Failed!" && exit 1)
+        run: npm run test || (echo "ERROR Cypress Tests Failed!" && exit 1)
