@@ -38,4 +38,4 @@ jobs:
         run: npx cypress install || echo "Cypress already installed"
 
       - name: Run Cypress Tests
-        run: npx cypress run --browser chrome --headless
+        run: npm run test
