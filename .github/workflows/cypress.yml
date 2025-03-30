@@ -15,28 +15,27 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'  # Ensure this matches your local PHP version
+
+      - name: Start PHP Server
+        run: php -S localhost:8080 -t . &
+      
+      - name: Wait for Server to be Ready
+        run: npx wait-on http://localhost:8080 --timeout 60000 || (echo "Server did not start in time" && exit 1)
+
+      - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
       - name: Install Dependencies
-        run: npm ci  # Use npm ci for a clean install
+        run: npm ci
 
       - name: Install Cypress
         run: npx cypress install || echo "Cypress already installed"
-
-      - name: Start Web Server
-        run: npm run start &  # Starts the server in the background
-
-      - name: Wait for Server to be Ready
-        run: npx wait-on http://localhost:8080 --timeout 60000 || (echo "Server did not start in time" && exit 1)
-
-      # - name: Set Correct Permissions
-      #   run: sudo chmod -R 777 $(npm root -g)/cypress || true
-
-      # - name: Verify Cypress Installation
-      #   run: npx cypress --version
 
       - name: Run Cypress Tests
         run: npm run test
