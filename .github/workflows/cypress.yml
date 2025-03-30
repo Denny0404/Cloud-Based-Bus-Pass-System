@@ -18,22 +18,13 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.2'  # Ensure this matches your local PHP version
 
       - name: Start PHP Server
-        run: |
-          nohup php -S 127.0.0.1:8080 -t public > server.log 2>&1 &
+        run: php -S localhost:8080 -t . &
       
-      - name: Install wait-on
-        run: npm install -g wait-on
-
       - name: Wait for Server to be Ready
-        run: |
-          for i in {1..10}; do
-            curl -Is 127.0.0.1:8080 && break
-            echo "Waiting for server..."
-            sleep 2
-          done
+        run: npx wait-on http://localhost:8080 --timeout 60000 || (echo "Server did not start in time" && exit 1)
 
       - name: Install Node.js
         uses: actions/setup-node@v3
@@ -41,19 +32,10 @@ jobs:
           node-version: '18'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
       - name: Install Cypress
         run: npx cypress install || echo "Cypress already installed"
 
       - name: Run Cypress Tests
-        run: npx cypress run --browser chrome --headless
-
-      - name: Upload Cypress Videos & Screenshots on Failure
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: cypress-artifacts
-          path: |
-            cypress/videos
-            cypress/screenshots
+        run: npm run test
