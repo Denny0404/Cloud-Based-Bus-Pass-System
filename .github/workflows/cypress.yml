@@ -27,10 +27,10 @@ jobs:
         run: |
           php -S 0.0.0.0:8080 -t . > server.log 2>&1 &
           sleep 5
-          curl -I http://localhost:8080/busspasssystem/index.html || (echo "ERROR: PHP server failed to start!" && cat server.log && exit 1)
+          curl -I http://localhost:8080/busspasssystem/ || (echo "ERROR: PHP server failed to start!" && cat server.log && exit 1)
 
       - name: Wait for Server to be Ready
-        run: npx wait-on http://localhost:8080/busspasssystem/index.html --timeout 60000 || (echo "ERROR Server did not start in time!" && exit 1)
+        run: npx wait-on http://localhost:8080/busspasssystem/ --timeout 60000 || (echo "ERROR Server did not start in time!" && exit 1)
 
       - name: Install Node.js
         uses: actions/setup-node@v3
