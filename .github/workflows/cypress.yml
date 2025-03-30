@@ -18,19 +18,22 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'  # Ensure this matches your local PHP version
-
-      - name: Verify busspasssystem Directory Exists
-        run: ls -lah busspasssystem || (echo "ERROR busspasssystem folder missing!" && exit 1)
+          php-version: '8.2'
 
       - name: Start PHP Server
         run: |
-          php -S 0.0.0.0:8080 -t . > server.log 2>&1 &
-          sleep 5
-          curl -I http://localhost:8080/busspasssystem/ || (echo "ERROR: PHP server failed to start!" && cat server.log && exit 1)
+          nohup php -S 127.0.0.1:8080 -t public > server.log 2>&1 &
+      
+      - name: Install wait-on
+        run: npm install -g wait-on
 
       - name: Wait for Server to be Ready
-        run: npx wait-on http://localhost:8080/ --timeout 60000 || (echo "ERROR Server did not start in time!" && exit 1)
+        run: |
+          for i in {1..10}; do
+            curl -Is 127.0.0.1:8080 && break
+            echo "Waiting for server..."
+            sleep 2
+          done
 
       - name: Install Node.js
         uses: actions/setup-node@v3
@@ -38,10 +41,19 @@ jobs:
           node-version: '18'
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
 
       - name: Install Cypress
         run: npx cypress install || echo "Cypress already installed"
 
       - name: Run Cypress Tests
-        run: npm run test || (echo "ERROR Cypress Tests Failed!" && exit 1)
+        run: npx cypress run --browser chrome --headless
+
+      - name: Upload Cypress Videos & Screenshots on Failure
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-artifacts
+          path: |
+            cypress/videos
+            cypress/screenshots
