@@ -32,7 +32,7 @@ jobs:
           node-version: '18'
 
       - name: Install Dependencies
-        run: npm install  # Change npm ci to npm install if lock file is missing
+        run: npm ci
 
       - name: Install Cypress
         run: npx cypress install || echo "Cypress already installed"
