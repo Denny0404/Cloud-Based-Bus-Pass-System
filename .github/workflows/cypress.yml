@@ -27,10 +27,12 @@ jobs:
         run: npx cypress install || echo "Cypress already installed"
 
       - name: Start Web Server
-        run: npm start &  # Start the application in the background
+        run: |
+          npm start &
+          sleep 10  # Wait to ensure the server starts
 
-      - name: Wait for Server to be Ready
-        run: npx wait-on http://localhost:8080 --timeout 60000 || (echo "Server did not start in time" && exit 1)
+      - name: Check if Server is Running
+        run: curl -Is http://localhost:8080 | head -n 1 || (echo "Server did not start" && exit 1)
 
       # - name: Set Correct Permissions
       #   run: sudo chmod -R 777 $(npm root -g)/cypress || true
