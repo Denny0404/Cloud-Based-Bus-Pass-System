@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "start": "node server.js",
     "cypress:open": "npx cypress open",
     "cypress:run": "cypress run",
     "test": "npx cypress run --browser chrome --spec \"cypress/e2e/test/busPass.cy.js\" --reporter mochawesome",
