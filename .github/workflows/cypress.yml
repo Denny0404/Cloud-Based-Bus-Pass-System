@@ -33,7 +33,9 @@ jobs:
           sudo /etc/init.d/mysql start
 
       - name: Run Cypress Tests
-        run: npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
+        run: |
+          chmod +x node_modules/.bin/cypress
+          npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
 
       - name: Upload Cypress Reports
         uses: actions/upload-artifact@v4
