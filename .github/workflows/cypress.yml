@@ -8,6 +8,7 @@ on:
     branches:
       - development
 
+
 jobs:
   cypress-test:
     runs-on: ubuntu-latest
@@ -21,6 +22,7 @@ jobs:
           sudo apt update
           sudo apt install -y apache2 php php-mysql unzip
           sudo service apache2 start
+          sudo rm -rf /var/www/html/*  # Clean previous files
           sudo cp -r * /var/www/html/  # Copy project files to Apache root
           sudo chmod -R 755 /var/www/html/
           sudo sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf  # Change Apache to port 8080
