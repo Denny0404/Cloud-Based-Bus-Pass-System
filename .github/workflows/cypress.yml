@@ -33,12 +33,15 @@ jobs:
             ${{ runner.os }}-cypress-
 
       - name: Install Cypress
-        run: |
-          npm install cypress --save-dev
-          npx cypress install || echo "Cypress already installed"
+        run: npx cypress install
+
+      - name: Fix Cypress Permissions
+        run: chmod +x node_modules/.bin/cypress
 
       - name: Verify Cypress Installation
-        run: npx cypress verify
+        run: |
+          chmod +x node_modules/.bin/cypress
+          npx cypress verify
 
       - name: Start Local Server (XAMPP)
         run: |
@@ -46,7 +49,9 @@ jobs:
           sudo /etc/init.d/mysql start
 
       - name: Run Cypress Tests
-        run: npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
+        run: |
+          chmod +x node_modules/.bin/cypress
+          npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
 
       - name: Upload Cypress Reports
         uses: actions/upload-artifact@v4
