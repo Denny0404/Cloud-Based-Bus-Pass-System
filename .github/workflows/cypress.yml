@@ -41,7 +41,14 @@ jobs:
         run: npm install
 
       - name: Install Cypress
-        run: npx cypress install || echo "Cypress already installed"
+        run: npx cypress install --force
+
+      - name: Set Permissions for Cypress
+        run: chmod +x $(npx cypress cache path)/Cypress/Cypress
 
       - name: Run Cypress Tests
-        run: npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
+        run: |
+          echo "Checking Cypress Installation"
+          npx cypress verify || (echo "Cypress not installed correctly" && exit 1)
+          echo "Running Cypress Tests..."
+          npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
