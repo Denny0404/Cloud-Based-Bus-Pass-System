@@ -24,8 +24,8 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Install Cypress (Explicitly)
-        run: npx cypress install
+      - name: Install Cypress
+        run: npx cypress install || echo "Cypress already installed"
 
       - name: Start Local Server (XAMPP)
         run: |
