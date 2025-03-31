@@ -18,24 +18,34 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'  # Ensure this matches your local PHP version
+          php-version: '8.2'
+
+      - name: List Directory Structure (Debugging)
+        run: ls -R
 
       - name: Start PHP Server
-        run: php -S localhost:8080 -t . &
-      
+        run: php -S localhost:8080 -t ./Cloud-Based-Bus-Pass-System &
+
       - name: Wait for Server to be Ready
-        run: npx wait-on http://localhost:8080 --timeout 60000 || (echo "Server did not start in time" && exit 1)
+        run: |
+          sleep 10 # Ensure server has time to start
+          curl --retry 10 --retry-delay 5 --retry-connrefused -s http://localhost:8080/Cloud-Based-Bus-Pass-System/index.html || exit 1
 
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'  # Upgrade to Node.js 20+ to prevent EBADENGINE errors
 
       - name: Install Dependencies
         run: npm ci
 
-      - name: Install Cypress
-        run: npx cypress install || echo "Cypress already installed"
+      - name: Install Cypress Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libnss3 xvfb
 
       - name: Run Cypress Tests
-        run: npm run test
+        run: |
+          export DISPLAY=:99
+          Xvfb :99 -ac &
+          npx cypress run --browser chrome --headless --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
