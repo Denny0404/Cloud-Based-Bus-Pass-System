@@ -24,8 +24,21 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Cache Cypress Binary
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/Cypress
+          key: ${{ runner.os }}-cypress-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-cypress-
+
       - name: Install Cypress
-        run: npx cypress install || echo "Cypress already installed"
+        run: |
+          npm install cypress --save-dev
+          npx cypress install || echo "Cypress already installed"
+
+      - name: Verify Cypress Installation
+        run: npx cypress verify
 
       - name: Start Local Server (XAMPP)
         run: |
@@ -33,9 +46,7 @@ jobs:
           sudo /etc/init.d/mysql start
 
       - name: Run Cypress Tests
-        run: |
-          chmod +x node_modules/.bin/cypress
-          npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
+        run: npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
 
       - name: Upload Cypress Reports
         uses: actions/upload-artifact@v4
