@@ -32,7 +32,7 @@ jobs:
         run: npm install -g wait-on
 
       - name: Wait for Server to Start
-        run: wait-on http://localhost:8080/Cloud-Based-Bus-Pass-System
+        run: wait-on http://localhost:8080/Cloud-Based-Bus-Pass-System --timeout 30000
 
       - name: Run Cypress Tests
         run: npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
