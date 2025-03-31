@@ -1,4 +1,4 @@
-name: Cypress CI Pipeline
+name: Cypress Live Test
 
 on:
   push:
@@ -15,17 +15,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'  # Ensure this matches your local PHP version
-
-      - name: Start PHP Server
-        run: php -S localhost:8080 -t . &
-      
-      - name: Wait for Server to be Ready
-        run: npx wait-on http://localhost:8080 --timeout 60000 || (echo "Server did not start in time" && exit 1)
-
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
@@ -37,5 +26,5 @@ jobs:
       - name: Install Cypress
         run: npx cypress install || echo "Cypress already installed"
 
-      - name: Run Cypress Tests
-        run: npm run test
+      - name: Run Cypress Tests on Live Server
+        run: DEBUG=cypress:* npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
