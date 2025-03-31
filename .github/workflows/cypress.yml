@@ -21,7 +21,7 @@ jobs:
           php-version: '8.2'  # Ensure this matches your local PHP version
 
       - name: Start PHP Server
-        run: php -S localhost:8080 -t Cloud-Based-Bus-Pass-System &
+        run: php -S localhost:8080 -t busspasssystem &
       
       - name: Wait for Server to be Ready
         run: npx wait-on http://localhost:8080 --timeout 60000 || (echo "Server did not start in time" && exit 1)
