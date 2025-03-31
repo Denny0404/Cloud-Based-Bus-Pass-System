@@ -22,7 +22,8 @@ jobs:
           sudo apt install -y apache2 php php-mysql unzip
           sudo service apache2 start
           sudo rm -rf /var/www/html/*  # Clean previous files
-          sudo cp -r * /var/www/html/  # Copy project files to Apache root
+          sudo mkdir -p /var/www/html/Cloud-Based-Bus-Pass-System/
+          sudo cp -r * /var/www/html/Cloud-Based-Bus-Pass-System/  # Move files correctly
           sudo chmod -R 755 /var/www/html/
           sudo sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
           sudo service apache2 restart
