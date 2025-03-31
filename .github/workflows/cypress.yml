@@ -14,28 +14,15 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-        with:
-          submodules: recursive  # Fix submodule issue
-
-      - name: Initialize Submodules
-        run: |
-          git submodule init
-          git submodule update --recursive --remote
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.2'  # Ensure this matches your local PHP version
 
       - name: Start PHP Server
-        run: nohup php -S localhost:8080 -t . > server.log 2>&1 &
-
-      - name: Debug Server
-        run: |
-          sleep 5
-          curl -I http://localhost:8080 || echo "Server not responding"
-          cat server.log || echo "No logs found"
-
+        run: php -S localhost:8080 -t . &
+      
       - name: Wait for Server to be Ready
         run: npx wait-on http://localhost:8080 --timeout 60000 || (echo "Server did not start in time" && exit 1)
 
@@ -45,23 +32,10 @@ jobs:
           node-version: '18'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
       - name: Install Cypress
-        run: npm install -g cypress || echo "Cypress already installed"
-
-      - name: Verify Cypress Installation
-        run: npx cypress verify || (echo "Cypress not installed correctly" && exit 1)
-
-      - name: Set Permissions for Cypress
-        run: |
-          CYPRESS_BIN=$(npx cypress cache path)/Cypress/Cypress || true
-          if [ -f "$CYPRESS_BIN" ]; then
-            chmod +x "$CYPRESS_BIN"
-          else
-            echo "Cypress binary not found!"
-            exit 1
-          fi
+        run: npx cypress install || echo "Cypress already installed"
 
       - name: Run Cypress Tests
-        run: npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
+        run: npm run test
