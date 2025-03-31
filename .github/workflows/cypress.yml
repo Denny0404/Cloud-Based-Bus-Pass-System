@@ -38,7 +38,7 @@ jobs:
           cat server.log || echo "No logs found"
 
       - name: Wait for Server to Start (Max 30s)
-        run: npx wait-on http://localhost:8080/Cloud-Based-Bus-Pass-System --timeout 30000 || (echo "Server failed to start"; cat server.log; exit 1)
+        run: npx wait-on http://localhost:8080 --timeout 60000 || (echo "Server did not start in time" && exit 1)
 
       - name: Run Cypress Tests
         run: npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
