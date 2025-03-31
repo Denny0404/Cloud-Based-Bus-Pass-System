@@ -24,13 +24,16 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Install Cypress (Explicitly)
+        run: npx cypress install
+
       - name: Start Local Server (XAMPP)
         run: |
           sudo /etc/init.d/apache2 start
           sudo /etc/init.d/mysql start
 
       - name: Run Cypress Tests
-        run: npm run test
+        run: npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
 
       - name: Upload Cypress Reports
         uses: actions/upload-artifact@v4
