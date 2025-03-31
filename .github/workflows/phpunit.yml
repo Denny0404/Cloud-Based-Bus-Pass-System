@@ -20,11 +20,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          extensions: mbstring, mysqli, pdo_mysql, xdebug
+          coverage: xdebug
           tools: composer, phpunit
-
-      - name: 🚀 Remove `vendor/` and Lock File
-        run: rm -rf vendor composer.lock
 
       - name: ⚙️ Install Dependencies
         run: composer install --no-progress --prefer-dist
