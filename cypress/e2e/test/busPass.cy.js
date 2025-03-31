@@ -7,7 +7,7 @@ describe('template spec', () => {
         const numberGenerator = new Data('number', 10);
         const phoneNumber = numberGenerator.generate();
 
-        cy.visit('/index.html');
+        cy.visit('/');
         // home page
         cy.contains('Book Now!').click();
 
@@ -35,7 +35,7 @@ describe('template spec', () => {
         });
 
         // Home page for validation
-        cy.visit('/index.html');
+        cy.visit('/');
         cy.viewport('macbook-16');
 
         // Click 'Manage Pass' and ensure it worked
@@ -56,7 +56,7 @@ describe('template spec', () => {
         const numberGenerator = new Data('number', 10);
         const phoneNumber = numberGenerator.generate();
 
-        cy.visit('/index.html');
+        cy.visit('/');
         // home page
         cy.contains('Book Now!').click();
 
@@ -84,7 +84,7 @@ describe('template spec', () => {
         });
 
         // Home page for validation
-        cy.visit('/index.html');
+        cy.visit('/');
         cy.viewport('macbook-16');
 
         // Click 'Manage Pass' and ensure it worked
@@ -111,7 +111,7 @@ describe('template spec', () => {
         cy.get('[type="submit"]').click();
 
         // Home page for validation
-        cy.visit('/index.html');
+        cy.visit('/');
         cy.viewport('macbook-16');
 
         // Click 'Manage Pass' and ensure it worked
@@ -131,7 +131,7 @@ describe('template spec', () => {
         const numberGenerator = new Data('number', 10);
         const phoneNumber = numberGenerator.generate();
 
-        cy.visit('/index.html');
+        cy.visit('/');
         // home page
         cy.contains('Book Now!').click();
 
@@ -159,7 +159,7 @@ describe('template spec', () => {
         });
 
         // Home page for validation
-        cy.visit('/index.html');
+        cy.visit('/');
         cy.viewport('macbook-16');
 
         // Click 'Manage Pass' and ensure it worked
