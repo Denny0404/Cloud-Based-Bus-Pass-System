@@ -14,23 +14,23 @@ jobs:
 
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: ⚙️ Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'npm'
+      - name: ⚙️ Setup PHP & Apache
+        run: |
+          sudo apt update
+          sudo apt install -y apache2 php php-mysql unzip
+          sudo service apache2 start
+          sudo cp -r * /var/www/html/  # Copy project files to Apache root
+          sudo chmod -R 755 /var/www/html/
 
       - name: 📦 Install Dependencies
         run: |
           npm ci --legacy-peer-deps
           npx cypress install
 
-      - name: 🚀 Start the Server
-        run: |
-          nohup npm start &  # Start server in the background
-          sleep 10  # Wait for server to fully start
+      - name: 🚀 Wait for Apache to Start
+        run: sleep 10  # Wait for the server to be ready
 
       - name: 🏃 Run Cypress Tests
         run: npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
