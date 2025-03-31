@@ -35,4 +35,4 @@ jobs:
         run: chmod +x node_modules/.bin/cypress || true
 
       - name: Run Cypress Tests on Live Server
-        run: DEBUG=cypress:* npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
+        run: npm run test
