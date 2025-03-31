@@ -7,7 +7,7 @@ describe('template spec', () => {
         const numberGenerator = new Data('number', 10);
         const phoneNumber = numberGenerator.generate();
 
-        cy.visit('/index.html');
+        cy.visit('/');
         // home page
         cy.contains('Book Now!').click();
 

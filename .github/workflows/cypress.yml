@@ -1,4 +1,4 @@
-name: Cypress Live Test
+name: Cypress CI Pipeline
 
 on:
   push:
@@ -13,7 +13,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'  # Ensure this matches your local PHP version
+
+      - name: Start PHP Server
+        run: php -S localhost:8080 -t . &
+      
+      - name: Wait for Server to be Ready
+        run: npx wait-on http://localhost:8080 --timeout 60000 || (echo "Server did not start in time" && exit 1)
 
       - name: Install Node.js
         uses: actions/setup-node@v3
@@ -26,13 +37,5 @@ jobs:
       - name: Install Cypress
         run: npx cypress install || echo "Cypress already installed"
 
-      - name: Start Live Server
-        run: |
-          npm start &
-          sleep 10
-
-      - name: Ensure Cypress Executable Permission
-        run: chmod +x node_modules/.bin/cypress || true
-
-      - name: Run Cypress Tests on Live Server
+      - name: Run Cypress Tests
         run: npm run test
