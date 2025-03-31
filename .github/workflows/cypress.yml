@@ -39,8 +39,5 @@ jobs:
           npm install
           npx cypress install
 
-      - name: Set Cypress Permissions
-        run: chmod -R 777 node_modules/.cache/Cypress
-
       - name: Run Cypress Tests
         run: npm run test
