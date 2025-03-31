@@ -8,6 +8,15 @@ describe('template spec', () => {
         const phoneNumber = numberGenerator.generate();
 
         cy.visit('/');
+        cy.wait(5000); // Wait for 5 seconds to ensure page loads
+
+        // Take a screenshot of what Cypress is seeing
+        cy.screenshot('page-loaded');
+
+        // Debug the page HTML content
+        cy.document().then((doc) => {
+            cy.log(doc.documentElement.innerHTML); // Logs entire HTML to Cypress
+        });
         // home page
         cy.contains('Book Now!').click();
 
