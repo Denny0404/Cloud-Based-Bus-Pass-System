@@ -8,7 +8,6 @@ on:
     branches:
       - development
 
-
 jobs:
   cypress-test:
     runs-on: ubuntu-latest
@@ -25,8 +24,11 @@ jobs:
           sudo rm -rf /var/www/html/*  # Clean previous files
           sudo cp -r * /var/www/html/  # Copy project files to Apache root
           sudo chmod -R 755 /var/www/html/
-          sudo sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf  # Change Apache to port 8080
+          sudo sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
           sudo service apache2 restart
+
+      - name: 🔍 Debug File Structure
+        run: ls -R /var/www/html/
 
       - name: 🚀 Verify Apache is Running
         run: |
@@ -39,7 +41,7 @@ jobs:
           npx cypress install
 
       - name: ⏳ Wait for Server to Start
-        run: sleep 20  # Give server enough time to fully start
+        run: sleep 30  # Increase wait time for Apache to fully load
 
       - name: 🏃 Run Cypress Tests
         run: npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
