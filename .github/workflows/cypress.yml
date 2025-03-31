@@ -38,4 +38,4 @@ jobs:
         run: npx cypress install || echo "Cypress already installed"
 
       - name: Run Cypress Tests
-        run: yarn run cypress open
+        run: npm run test
