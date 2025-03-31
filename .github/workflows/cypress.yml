@@ -23,16 +23,19 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Kill any running server
+        run: pkill -f "node" || true
+
       - name: Start Server
-        run: npm start &
+        run: nohup npm start > server.log 2>&1 &
         env:
           CI: false
 
-      - name: Install wait-on
-        run: npm install -g wait-on
+      - name: Verify Server is Running
+        run: curl -I http://localhost:8080/Cloud-Based-Bus-Pass-System || echo "Server not responding"
 
-      - name: Wait for Server to Start
-        run: wait-on http://localhost:8080/Cloud-Based-Bus-Pass-System --timeout 30000
+      - name: Wait for Server to Start (Max 30s)
+        run: npx wait-on http://localhost:8080/Cloud-Based-Bus-Pass-System --timeout 30000
 
       - name: Run Cypress Tests
         run: npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
