@@ -41,7 +41,7 @@ jobs:
         run: npm install
 
       - name: Install Cypress
-        run: npx cypress install --force
+        run: npx cypress install || echo "Cypress already installed"
 
       - name: Set Permissions for Cypress
         run: chmod +x $(npx cypress cache path)/Cypress/Cypress
