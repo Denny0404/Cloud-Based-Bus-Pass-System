@@ -26,5 +26,13 @@ jobs:
       - name: Install Cypress
         run: npx cypress install || echo "Cypress already installed"
 
+      - name: Start Live Server
+        run: |
+          npm start &
+          sleep 10
+
+      - name: Ensure Cypress Executable Permission
+        run: chmod +x node_modules/.bin/cypress || true
+
       - name: Run Cypress Tests on Live Server
         run: DEBUG=cypress:* npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
