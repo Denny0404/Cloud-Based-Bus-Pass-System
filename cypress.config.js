@@ -2,7 +2,7 @@ const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
   e2e: {
-    baseUrl: "http://localhost:8080",
+    baseUrl: "https://denny0404.github.io/Cloud-Based-Bus-Pass-System",
     video: true,
     reporter: "mochawesome",
     reporterOptions: {
