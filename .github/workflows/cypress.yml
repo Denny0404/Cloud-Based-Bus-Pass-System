@@ -28,7 +28,8 @@ jobs:
         run: npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
 
       - name: Upload Cypress Reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: cypress-reports
           path: cypress/reports/
+
