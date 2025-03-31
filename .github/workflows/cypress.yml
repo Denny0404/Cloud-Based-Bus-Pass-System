@@ -20,9 +20,6 @@ jobs:
         with:
           php-version: '8.2'
 
-      - name: Install PHP Dependencies
-        run: composer install --no-interaction --prefer-dist
-
       - name: Start PHP Server
         run: php -S localhost:8080 -t Cloud-Based-Bus-Pass-System &
 
