@@ -14,18 +14,19 @@ jobs:
 
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: ⚙️ Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: 'npm'
 
       - name: 📦 Install Dependencies
         run: |
-          npm install
-          npx cypress install  # Ensures Cypress is properly installed
-          chmod +x node_modules/.bin/cypress  # Fixes permission issue
+          npm ci --legacy-peer-deps  # Fix dependency conflicts
+          npx cypress install  # Ensure Cypress is installed
+          chmod +x node_modules/.bin/cypress  # Fix execution permissions
 
       - name: 🏃 Run Cypress Tests
         run: npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
