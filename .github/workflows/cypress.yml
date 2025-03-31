@@ -9,33 +9,32 @@ on:
       - development
 
 jobs:
-  cypress-test:
+  test:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          php-version: '8.2'  # Ensure this matches your local PHP version
+          node-version: 20
 
-      - name: Start PHP Server
-        run: php -S localhost:8080 -t . &
-      
-      - name: Wait for Server to be Ready
-        run: npx wait-on http://localhost:8080 --timeout 60000 || (echo "Server did not start in time" && exit 1)
+      - name: Install dependencies
+        run: |
+          cd src
+          npm install
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm ci
 
-      - name: Install Cypress
-        run: npx cypress install || echo "Cypress already installed"
+      - name: Fix react-scripts Permissions
+        run: chmod +x node_modules/.bin/react-scripts
 
-      - name: Run Cypress Tests
-        run: npm run test
+      - name: Install Testing Library Dependencies
+        run: npm install --save-dev @testing-library/react @testing-library/jest-dom @testing-library/user-event
+
+
+      - name: Run Tests
+        run: npm test -- --watchAll=false
