@@ -24,9 +24,13 @@ jobs:
 
       - name: 📦 Install Dependencies
         run: |
-          npm ci --legacy-peer-deps  # Fix dependency conflicts
-          npx cypress install  # Ensure Cypress is installed
-          chmod +x node_modules/.bin/cypress  # Fix execution permissions
+          npm ci --legacy-peer-deps
+          npx cypress install
+
+      - name: 🚀 Start the Server
+        run: |
+          nohup npm start &  # Start server in the background
+          sleep 10  # Wait for server to fully start
 
       - name: 🏃 Run Cypress Tests
         run: npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
