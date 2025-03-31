@@ -27,8 +27,14 @@ jobs:
           sudo sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
           sudo service apache2 restart
 
-      - name: 🔍 Debug File Structure
-        run: ls -R /var/www/html/
+      - name: 🔍 Debug Apache Index Page
+        run: curl -s http://localhost:8080/ > apache_index.html
+        
+      - name: 📝 Upload Debug File
+        uses: actions/upload-artifact@v3
+        with:
+          name: Apache_Index_Page
+          path: apache_index.html
 
       - name: 🚀 Restart Apache & Wait
         run: |
