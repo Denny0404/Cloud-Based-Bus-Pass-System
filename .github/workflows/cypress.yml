@@ -23,3 +23,6 @@ jobs:
 
       - name: 📦 Install Dependencies
         run: npm install
+        
+      - name: 🏃 Run Cypress Tests
+        run: npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
