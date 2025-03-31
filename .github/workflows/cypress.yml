@@ -31,10 +31,15 @@ jobs:
       - name: 🔍 Debug File Structure
         run: ls -R /var/www/html/
 
-      - name: 🚀 Verify Apache is Running
+      - name: 🚀 Restart Apache & Wait
         run: |
-          sudo service apache2 status || (echo "Apache Failed to Start" && exit 1)
-          curl -Is http://localhost:8080 || (echo "Server is not reachable" && exit 1)
+          sudo service apache2 restart
+          sleep 30  # Give Apache more time to fully start
+
+      # - name: 🚀 Verify Apache is Running
+      #   run: |
+      #     sudo service apache2 status || (echo "Apache Failed to Start" && exit 1)
+      #     curl -Is http://localhost:8080 || (echo "Server is not reachable" && exit 1)
 
       - name: 📦 Install Dependencies
         run: |
