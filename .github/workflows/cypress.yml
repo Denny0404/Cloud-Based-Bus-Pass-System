@@ -11,16 +11,6 @@ on:
 jobs:
   cypress-test:
     runs-on: ubuntu-latest
-
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: travel
-        ports:
-          - 3306:3306
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -28,25 +18,13 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
-          extensions: mysqli
+          php-version: '8.2'  # Ensure this matches your local PHP version
 
       - name: Start PHP Server
-        run: php -S 127.0.0.1:8080 -t Cloud-Based-Bus-Pass-System &
-
+        run: php -S localhost:8080 -t Cloud-Based-Bus-Pass-System &
+      
       - name: Wait for Server to be Ready
-        run: npx wait-on http://127.0.0.1:8080 --timeout 60000 || (echo "Server did not start in time" && exit 1)
-
-      - name: Import Database
-        run: |
-          if [ -f "db_dump.sql" ]; then
-            mysql -h127.0.0.1 -uroot --password=root travel < db_dump.sql
-          elif [ -f "Cloud-Based-Bus-Pass-System/db_dump.sql" ]; then
-            mysql -h127.0.0.1 -uroot --password=root travel < Cloud-Based-Bus-Pass-System/db_dump.sql
-          else
-            echo "db_dump.sql not found!"
-            exit 1
-          fi
+        run: npx wait-on http://localhost:8080 --timeout 60000 || (echo "Server did not start in time" && exit 1)
 
       - name: Install Node.js
         uses: actions/setup-node@v3
