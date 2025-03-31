@@ -22,7 +22,10 @@ jobs:
           node-version: 18
 
       - name: 📦 Install Dependencies
-        run: npm install
-        
+        run: |
+          npm install
+          npx cypress install  # Ensures Cypress is properly installed
+          chmod +x node_modules/.bin/cypress  # Fixes permission issue
+
       - name: 🏃 Run Cypress Tests
         run: npx cypress run --browser chrome --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
