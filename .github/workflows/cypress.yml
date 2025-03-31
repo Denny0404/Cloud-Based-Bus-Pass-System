@@ -9,33 +9,23 @@ on:
       - development
 
 jobs:
-  cypress-test:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          php-version: '8.2'  # Ensure this matches your local PHP version
+          node-version: '14'
 
-      - name: Start PHP Server
-        run: php -S localhost:8080 -t . &
-      
-      - name: Wait for Server to be Ready
-        run: npx wait-on http://localhost:8080 --timeout 60000 || (echo "Server did not start in time" && exit 1)
+      - name: Install dependencies
+        run: npm install
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+      - name: Run tests
+        run: npm test
 
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Install Cypress
-        run: npx cypress install || echo "Cypress already installed"
-
-      - name: Run Cypress Tests
-        run: npm run test
+      - name: Deploy
+        run: npm run deploy
