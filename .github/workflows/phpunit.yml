@@ -12,16 +12,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: travel
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
     steps:
       - name: 📂 Checkout repository
         uses: actions/checkout@v4
@@ -31,16 +21,10 @@ jobs:
         with:
           php-version: '8.2'
           extensions: mbstring, mysqli, pdo_mysql, xdebug
-          coverage: xdebug
           tools: composer, phpunit
 
       - name: ⚙️ Install Dependencies
         run: composer install --no-progress --prefer-dist
-
-      - name: 🛠 Set up Database
-        run: |
-          mysql -h 127.0.0.1 -u root -proot -e "CREATE DATABASE IF NOT EXISTS travel;"
-          php artisan migrate --force
 
       - name: ✅ Run PHPUnit Tests
         run: vendor/bin/phpunit --testdox --colors=always --coverage-text
@@ -49,7 +33,7 @@ jobs:
         run: vendor/bin/phpunit --coverage-html tests/report/
 
       - name: 📤 Upload Coverage Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # ✅ Updated version
         with:
           name: coverage-report
           path: tests/report/
