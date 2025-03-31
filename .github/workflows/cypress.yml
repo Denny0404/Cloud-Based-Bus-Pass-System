@@ -14,51 +14,28 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-        with:
-          submodules: true  # Ensure submodules are initialized
-
-      - name: Initialize Git Submodules
-        run: |
-          git submodule init
-          git submodule update --recursive --remote || echo "No submodules found"
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
-
-      - name: Debug Directory Structure
-        run: ls -R
+          php-version: '8.2'  # Ensure this matches your local PHP version
 
       - name: Start PHP Server
-        run: |
-          if [ -d "./Cloud-Based-Bus-Pass-System" ]; then
-            php -S localhost:8080 -t ./Cloud-Based-Bus-Pass-System &
-          else
-            echo "ERROR: Directory ./Cloud-Based-Bus-Pass-System does not exist!"
-            exit 1
-          fi
-
+        run: php -S localhost:8080 -t . &
+      
       - name: Wait for Server to be Ready
-        run: |
-          sleep 10
-          curl --retry 10 --retry-delay 5 --retry-connrefused -s http://localhost:8080/Cloud-Based-Bus-Pass-System/index.html || exit 1
+        run: npx wait-on http://localhost:8080 --timeout 60000 || (echo "Server did not start in time" && exit 1)
 
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '18'
 
       - name: Install Dependencies
         run: npm ci
 
-      - name: Install Cypress Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libnss3 xvfb
+      - name: Install Cypress
+        run: npx cypress install || echo "Cypress already installed"
 
       - name: Run Cypress Tests
-        run: |
-          export DISPLAY=:99
-          Xvfb :99 -ac &
-          npx cypress run --browser chrome --headless --spec "cypress/e2e/test/busPass.cy.js" --reporter mochawesome
+        run: yarn run cypress open
