@@ -1,9 +1,9 @@
-name: Deploy PHP to WebHost
+name: Deploy PHP to Hostinger
 
 on:
   push:
     branches:
-      - development
+      - development  # Change to your branch name
 
 jobs:
   deploy:
@@ -15,8 +15,14 @@ jobs:
       - name: Set up FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
-          server: blue-aardvark-631260.hostingersite.com
+          server: ftp://147.93.42.108  # Hostinger FTP/SFTP server
           username: u342955335.blue-aardvark-631260.hostingersite.com
           password: moneyInfo@7777
+          protocol: ftp  # Change to 'sftp' if needed
+          port: 21  # Use 22 for SFTP
+          passive: true  # Required for most shared hosting
           local-dir: "./"
-          server-dir: "/public_html/"  # Adjust based on your 000WebHost directory
+          server-dir: "/public_html/"  # Change if your Hostinger directory is different
+
+      - name: Verify Deployment
+        run: echo "Deployment to Hostinger Completed!"
