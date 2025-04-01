@@ -7,24 +7,23 @@ on:
   pull_request:
     branches:
       - development
-
+    
 jobs:
   cypress-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository with Submodules
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          submodules: true
           fetch-depth: 0
 
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: '18'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
       - name: Install Cypress and Fix Permissions
         run: |
@@ -36,3 +35,9 @@ jobs:
         run: npx cypress run
         env:
           CYPRESS_baseUrl: "https://blue-aardvark-631260.hostingersite.com"
+
+      - name: Upload Cypress Test Results (Optional)
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-results
+          path: cypress/screenshots/
