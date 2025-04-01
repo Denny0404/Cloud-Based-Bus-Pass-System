@@ -26,11 +26,13 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Install Cypress with Full Permissions
+      - name: Install Cypress and Fix Permissions
         run: |
           npm install cypress --save-dev
           npx cypress install
           chmod +x node_modules/.bin/cypress
 
-      - name: Run Cypress Tests
+      - name: Run Cypress Tests on Live Server
         run: npx cypress run
+        env:
+          CYPRESS_baseUrl: "https://blue-aardvark-631260.hostingersite.com"
