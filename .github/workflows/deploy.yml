@@ -15,12 +15,11 @@ jobs:
       - name: Set up FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
-          server: ftp://147.93.42.108  # Hostinger FTP/SFTP server
-          username: u342955335.blue-aardvark-631260.hostingersite.com
-          password: moneyInfo@7777
+          server: blue-aardvark-631260.hostingersite.com # Use Hostinger's FTP hostname instead of IP
+          username: ${{ secrets.FTP_USER }}  # Securely store username in GitHub Secrets
+          password: ${{ secrets.FTP_PASS }}  # Securely store password in GitHub Secrets
           protocol: ftp  # Change to 'sftp' if needed
           port: 21  # Use 22 for SFTP
-          passive: true  # Required for most shared hosting
           local-dir: "./"
           server-dir: "/public_html/"  # Change if your Hostinger directory is different
 
