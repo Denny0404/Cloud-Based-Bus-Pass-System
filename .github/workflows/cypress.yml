@@ -27,7 +27,7 @@ jobs:
         run: npx cypress install
 
       - name: Verify GitHub Pages is Reachable
-        run: curl -I https://denny0404.github.io/Cloud-Based-Bus-Pass-System/ || exit 1
+        run: curl -I https://blue-aardvark-631260.hostingersite.com/ || exit 1
 
       - name: Run Cypress Tests
         run: npm run test
