@@ -1,0 +1,22 @@
+name: Deploy PHP to WebHost
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: ftp://147.93.42.108
+          username: u342955335.blue-aardvark-631260.hostingersite.com
+          password: moneyInfo@7777
+          local-dir: "./"
+          server-dir: "/public_html/"  # Adjust based on your 000WebHost directory
