@@ -34,4 +34,6 @@ jobs:
         run: vendor/bin/phpunit --version
 
       - name: Run PHPUnit Tests
-        run: vendor/bin/phpunit --testdox tests/BillingTest.php
+        run: |
+          vendor/bin/phpunit --testdox tests/BillingTest.php
+          vendor/bin/phpunit --testdox tests/BookTest.php
