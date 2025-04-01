@@ -22,9 +22,16 @@ jobs:
           extensions: mbstring, intl, pdo_mysql
           coverage: none
 
-      - name: Install Dependencies
+      - name: Remove Vendor and Composer Lock (To Ensure Clean Install)
+        run: rm -rf vendor composer.lock
+
+      - name: Install Composer Dependencies
         run: |
           composer install --no-interaction --prefer-dist
+          composer dump-autoload -o
+
+      - name: Verify PHPUnit Installation
+        run: vendor/bin/phpunit --version
 
       - name: Run PHPUnit Tests
         run: vendor/bin/phpunit --testdox tests/BillingTest.php
