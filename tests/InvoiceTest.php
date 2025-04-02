@@ -1,24 +1,29 @@
 <?php
+
 use PHPUnit\Framework\TestCase;
 
-class InvoiceTest extends TestCase {
+class InvoiceTest extends TestCase
+{
     private $mockMysqli;
     private $mockMysqliResult;
 
-    protected function setUp(): void {
+    protected function setUp(): void
+    {
         // Mock the mysqli connection
         $this->mockMysqli = $this->createMock(mysqli::class);
-        
+
         // Mock the mysqli result
         $this->mockMysqliResult = $this->createMock(mysqli_result::class);
     }
 
-    public function testDatabaseConnectionMock() {
+    public function testDatabaseConnectionMock()
+    {
         // Ensure the mock database connection is valid
         $this->assertNotNull($this->mockMysqli, "Mock database connection should not be null.");
     }
 
-    public function testUpdatePaidAmountMock() {
+    public function testUpdatePaidAmountMock()
+    {
         $id = 1;
         $amt = 500;
 
@@ -34,7 +39,8 @@ class InvoiceTest extends TestCase {
         $this->assertTrue($result, "Paid amount update failed in mock test.");
     }
 
-    public function testFetchPassDetailsMock() {
+    public function testFetchPassDetailsMock()
+    {
         $id = 1;
         $mockData = [
             "id" => 1,
@@ -69,4 +75,3 @@ class InvoiceTest extends TestCase {
         $this->assertEquals("Test Destination", $row['dest'], "Mock destination does not match.");
     }
 }
-

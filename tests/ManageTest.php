@@ -1,9 +1,12 @@
 <?php
+
 use PHPUnit\Framework\TestCase;
 
-class ManageTest extends TestCase {
+class ManageTest extends TestCase
+{
 
-    public function testUserAuthenticationSuccess() {
+    public function testUserAuthenticationSuccess()
+    {
         // Mock a valid pass ID and password
         $mockPassId = 12345;
         $mockPassword = "testpass";
@@ -40,7 +43,8 @@ class ManageTest extends TestCase {
         $this->assertEquals(1000, $row['paid'], "Paid amount should match.");
     }
 
-    public function testUserAuthenticationFailure() {
+    public function testUserAuthenticationFailure()
+    {
         // Mock invalid password scenario
         $mockPassId = 12345;
         $correctPassword = "testpass";
@@ -67,7 +71,8 @@ class ManageTest extends TestCase {
         $this->assertTrue($redirected, "User should be redirected when password is incorrect.");
     }
 
-    public function testEmptyInputHandling() {
+    public function testEmptyInputHandling()
+    {
         // Simulate missing input scenario
         unset($_POST['pass_id']);
         unset($_POST['password']);

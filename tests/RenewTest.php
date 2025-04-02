@@ -1,9 +1,12 @@
 <?php
+
 use PHPUnit\Framework\TestCase;
 
-class RenewTest extends TestCase {
+class RenewTest extends TestCase
+{
 
-    public function testRenewPassSuccess() {
+    public function testRenewPassSuccess()
+    {
         // Mock valid user ID and new date
         $mockId = 12345;
         $currentDate = "2025-05-01"; // Current valid date
@@ -32,7 +35,8 @@ class RenewTest extends TestCase {
         $this->assertEquals(32, $expectedNod, "Expected days difference should be 32.");
     }
 
-    public function testInvalidDateInput() {
+    public function testInvalidDateInput()
+    {
         // Simulate invalid date input
         $_POST['id'] = 12345;
         $_POST['new_date'] = ""; // Empty date
@@ -41,7 +45,8 @@ class RenewTest extends TestCase {
         $this->assertEmpty($_POST['new_date'], "New date should not be empty.");
     }
 
-    public function testMissingPassId() {
+    public function testMissingPassId()
+    {
         // Simulate missing ID input
         unset($_POST['id']);
 

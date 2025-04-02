@@ -1,9 +1,12 @@
 <?php
+
 use PHPUnit\Framework\TestCase;
 
-class SuspendTest extends TestCase {
+class SuspendTest extends TestCase
+{
 
-    public function testSuspendPassSuccess() {
+    public function testSuspendPassSuccess()
+    {
         // Mock valid user ID
         $mockId = 12345;
         $currentDate = "2025-05-10"; // Valid till date
@@ -39,13 +42,12 @@ class SuspendTest extends TestCase {
         $this->assertEquals(date("Y-m-d"), $mockPassData['date'], "Pass date should be reset to today's date.");
     }
 
-    public function testInvalidPassId() {
+    public function testInvalidPassId()
+    {
         // Simulate missing ID
         unset($_POST['id']);
 
         // Check that the system does not process when ID is missing
         $this->assertArrayNotHasKey('id', $_POST, "Pass ID should be required.");
     }
-
-   
 }
