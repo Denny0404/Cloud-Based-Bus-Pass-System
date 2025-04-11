@@ -1,6 +1,7 @@
 <?php
-include("connection.php");
-
+if (!defined('PHPUNIT_RUNNING')) {
+    include('connection.php');
+}
 // Logic Functions
 function getPassById($con, $id) {
     $stmt = $con->prepare("SELECT * FROM pass WHERE id = ?");

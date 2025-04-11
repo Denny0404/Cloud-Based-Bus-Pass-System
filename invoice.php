@@ -1,5 +1,7 @@
 <?php
-include('connection.php');
+if (!defined('PHPUNIT_RUNNING')) {
+  include('connection.php');
+}
 
 // Logic Functions
 function updatePayment($con, $id, $amt) {
