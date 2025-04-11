@@ -1,5 +1,7 @@
 <?php
-include("connection.php");
+if (!defined('PHPUNIT_RUNNING')) {
+  include("connection.php");
+}
 date_default_timezone_set("Asia/Kolkata");
 
 // Logic Functions
