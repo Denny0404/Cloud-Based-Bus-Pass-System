@@ -35,9 +35,9 @@ jobs:
 
       - name: 🚀 Run All PHPUnit Tests (Logic Only)
         run: |
-          vendor/bin/phpunit tests/BillingTest.php
-          vendor/bin/phpunit tests/BookTest.php
-          vendor/bin/phpunit tests/InvoiceTest.php
-          vendor/bin/phpunit tests/ManageTest.php
-          vendor/bin/phpunit tests/RenewTest.php
-          vendor/bin/phpunit tests/SuspendTest.php
+          vendor/bin/phpunit --testdox tests/BillingTest.php
+          vendor/bin/phpunit --testdox tests/BookTest.php
+          vendor/bin/phpunit --testdox tests/InvoiceTest.php
+          vendor/bin/phpunit --testdox tests/ManageTest.php
+          vendor/bin/phpunit --testdox tests/RenewTest.php
+          vendor/bin/phpunit --testdox tests/SuspendTest.php
