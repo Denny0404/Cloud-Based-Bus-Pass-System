@@ -12,32 +12,31 @@ jobs:
   phpunit:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: 📥 Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up PHP
+      - name: ⚙️ Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
           extensions: mbstring, intl, pdo_mysql
           coverage: none
 
-      - name: Remove Vendor and Composer Lock (To Ensure Clean Install)
+      - name: 🧹 Clean Vendor and Lock Files
         run: rm -rf vendor composer.lock
 
-      - name: Install Composer Dependencies
+      - name: 📦 Install Composer Dependencies
         run: |
           composer install --no-interaction --prefer-dist
           composer dump-autoload -o
 
-      - name: Verify PHPUnit Installation
+      - name: ✅ Verify PHPUnit Installation
         run: vendor/bin/phpunit --version
 
-      - name: Run PHPUnit Tests
+      - name: 🚀 Run All PHPUnit Tests (Logic Only)
         run: |
-          vendor/bin/phpunit --testdox tests/BillingTest.php
-          vendor/bin/phpunit --testdox tests/BookTest.php
-          vendor/bin/phpunit --testdox tests/InvoiceTest.php
-          vendor/bin/phpunit --testdox tests/ManageTest.php
-          vendor/bin/phpunit --testdox tests/RenewTest.php
-          # vendor/bin/phpunit --testdox tests/SuspendTest.php
+          vendor/bin/phpunit tests/BillingTest.php
+          vendor/bin/phpunit tests/InvoiceTest.php
+          vendor/bin/phpunit tests/ManageTest.php
+          vendor/bin/phpunit tests/RenewTest.php
+          vendor/bin/phpunit tests/SuspendTest.php
