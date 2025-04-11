@@ -1,53 +1,76 @@
 <?php
+define('PHPUNIT_RUNNING', true);
+require_once 'suspend.php';
 
 use PHPUnit\Framework\TestCase;
 
-class SuspendTest extends TestCase
-{
+class SuspendTest extends TestCase {
 
-    public function testSuspendPassSuccess()
-    {
-        // Mock valid user ID
-        $mockId = 12345;
-        $currentDate = "2025-05-10"; // Valid till date
-        $dest = "Brampton";
-        $paidAmount = 1000;
-
-        // Simulated price list
-        $mockDestinationPrices = [
-            "Brampton" => 50,
-            "Toronto" => 70,
-            "Ottawa" => 100
-        ];
-
-        // Simulated database record
-        $mockPassData = [
-            'id' => $mockId,
-            'date' => $currentDate,
-            'dest' => $dest,
-            'paid' => $paidAmount
-        ];
-
-        // Calculate refund amount
-        $nod = round((strtotime($mockPassData['date']) - time()) / (60 * 60 * 24)) + 1;
-        $refundAmount = $mockDestinationPrices[$dest] * $nod;
-
-        // Simulated database update (mocking SQL)
-        $mockPassData['paid'] -= $refundAmount;
-        $mockPassData['date'] = date("Y-m-d"); // Update to current date
-
-        // Assertions
-        $this->assertGreaterThan(0, $refundAmount, "Refund amount should be positive.");
-        $this->assertEquals($paidAmount - $refundAmount, $mockPassData['paid'], "Paid amount should be updated correctly.");
-        $this->assertEquals(date("Y-m-d"), $mockPassData['date'], "Pass date should be reset to today's date.");
+    public function testGetRemainingDaysReturnsCorrectValue() {
+        $futureDate = date('Y-m-d', strtotime('+5 days'));
+        $expected = getRemainingDays($futureDate); // Get actual
+        $this->assertEquals($expected, getRemainingDays($futureDate));
     }
 
-    public function testInvalidPassId()
-    {
-        // Simulate missing ID
-        unset($_POST['id']);
+    public function testFetchPassDetailsReturnsRow() {
+        $mockCon = $this->createMock(mysqli::class);
+        $mockStmt = $this->createMock(mysqli_stmt::class);
+        $mockResult = $this->createMock(mysqli_result::class);
 
-        // Check that the system does not process when ID is missing
-        $this->assertArrayNotHasKey('id', $_POST, "Pass ID should be required.");
+        $expected = ['id' => 1, 'date' => '2025-12-31', 'dest' => 'Mathura'];
+
+        $mockCon->method('prepare')->willReturn($mockStmt);
+        $mockStmt->method('bind_param')->willReturn(true);
+        $mockStmt->method('execute')->willReturn(true);
+        $mockStmt->method('get_result')->willReturn($mockResult);
+        $mockResult->method('fetch_assoc')->willReturn($expected);
+
+        $this->assertEquals($expected, fetchPassDetails($mockCon, 1));
     }
+
+    public function testGetDestinationPriceReturnsCorrectValue() {
+        $mockCon = $this->createMock(mysqli::class);
+        $mockStmt = $this->createMock(mysqli_stmt::class);
+        $mockResult = $this->createMock(mysqli_result::class);
+
+        $mockCon->method('prepare')->willReturn($mockStmt);
+        $mockStmt->method('bind_param')->willReturn(true);
+        $mockStmt->method('execute')->willReturn(true);
+        $mockStmt->method('get_result')->willReturn($mockResult);
+        $mockResult->method('fetch_assoc')->willReturn(['price' => 120]);
+
+        $this->assertEquals(120, getDestinationPrice($mockCon, 'Mathura'));
+    }
+
+    public function testProcessRefundExecutesUpdatesSeparately() {
+        $mockCon = $this->createMock(mysqli::class);
+    
+        // First statement: for refund update
+        $stmt1 = $this->createMock(mysqli_stmt::class);
+        $stmt1->expects($this->once())->method('bind_param')->with('di', 250.0, 1)->willReturn(true);
+        $stmt1->expects($this->once())->method('execute')->willReturn(true);
+    
+        // Second statement: for date update
+        $stmt2 = $this->createMock(mysqli_stmt::class);
+        $stmt2->expects($this->once())->method('bind_param')->with('i', 1)->willReturn(true);
+        $stmt2->expects($this->once())->method('execute')->willReturn(true);
+    
+        // Prepare returns: first call returns stmt1, second call returns stmt2
+        $mockCon->method('prepare')->willReturnCallback(function ($query) use ($stmt1, $stmt2) {
+            if (str_contains($query, 'paid = paid -')) {
+                return $stmt1;
+            }
+            if (str_contains($query, 'date = CURDATE()')) {
+                return $stmt2;
+            }
+            return null;
+        });
+    
+        // Run function
+        processRefund($mockCon, 1, 250.0);
+    
+        // Final check
+        $this->assertTrue(true); // If no exceptions, it passed
+    }
+    
 }

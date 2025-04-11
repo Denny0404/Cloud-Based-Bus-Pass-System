@@ -12,17 +12,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up FTP Deploy
-        uses: SamKirkland/FTP-Deploy-Action@4.3.0
-        with:
-          server: 147.93.42.108 # Use Hostinger's FTP hostname instead of IP
-          username: ${{ secrets.FTP_USER }}  # Securely store username in GitHub Secrets
-          password: ${{ secrets.FTP_PASS }}  # Securely store password in GitHub Secrets
-          protocol: ftp  # Change to 'sftp' if needed
-          port: 21  # Use 22 for SFTP
-          local-dir: "./"
-          server-dir: "/public_html/"  # Change if your Hostinger directory is different
-          security: loose
+      # - name: Set up FTP Deploy
+      #   uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      #   with:
+      #     server: 147.93.42.108 # Use Hostinger's FTP hostname instead of IP
+      #     username: ${{ secrets.FTP_USER }}  # Securely store username in GitHub Secrets
+      #     password: ${{ secrets.FTP_PASS }}  # Securely store password in GitHub Secrets
+      #     protocol: ftp  # Change to 'sftp' if needed
+      #     port: 21  # Use 22 for SFTP
+      #     local-dir: "./"
+      #     server-dir: "/public_html/"  # Change if your Hostinger directory is different
+      #     security: loose
 
-      - name: Verify Deployment
-        run: echo "Deployment to Hostinger Completed!"
+      # - name: Verify Deployment
+      #   run: echo "Deployment to Hostinger Completed!"

@@ -1,53 +1,47 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
+define('PHPUNIT_RUNNING', true);
+require_once __DIR__ . '/../book.php';
+
 class BookTest extends TestCase {
-    private $mysqli;
 
-    protected function setUp(): void {
-        // Mock a database connection
-        $this->mysqli = $this->getMockBuilder(mysqli::class)
-                             ->disableOriginalConstructor()
-                             ->getMock();
+    public function testGetDestinationsReturnsResult() {
+        // Proper mysqli mock with query()
+        $mockCon = $this->getMockBuilder(mysqli::class)
+                        ->disableOriginalConstructor()
+                        ->onlyMethods(['query'])
+                        ->getMock();
+
+        $mockResult = $this->createMock(mysqli_result::class);
+
+        $mockCon->expects($this->once())
+                ->method('query')
+                ->with('SELECT name FROM destination')
+                ->willReturn($mockResult);
+
+        $result = getDestinations($mockCon);
+        $this->assertSame($mockResult, $result);
     }
 
-    public function testDatabaseConnection() {
-        // Ensure the database connection is not null
-        $this->assertNotNull($this->mysqli);
-    }
+    public function testPrintDestinationOptionsPrintsExpectedHTML() {
+        $mockResult = $this->getMockBuilder(stdClass::class)
+                           ->addMethods(['fetch_array'])
+                           ->getMock();
 
-    public function testFormValidation() {
-        $_POST = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'contact' => '1234567890',
-            'password' => 'securepass',
-            'date' => '2025-05-05',
-            'dest' => 'Brampton'
-        ];
+        $mockResult->expects($this->exactly(3))
+                   ->method('fetch_array')
+                   ->willReturnOnConsecutiveCalls(
+                       ['name' => 'Toronto'],
+                       ['name' => 'Waterloo'],
+                       false
+                   );
 
-        $this->assertArrayHasKey('name', $_POST);
-        $this->assertArrayHasKey('email', $_POST);
-        $this->assertArrayHasKey('contact', $_POST);
-        $this->assertArrayHasKey('password', $_POST);
-        $this->assertArrayHasKey('date', $_POST);
-        $this->assertArrayHasKey('dest', $_POST);
+        ob_start();
+        printDestinationOptions($mockResult);
+        $output = ob_get_clean();
 
-        // Ensure fields are not empty
-        foreach ($_POST as $key => $value) {
-            $this->assertNotEmpty($value, "$key should not be empty");
-        }
-    }
-
-    public function testDestinationRetrieval() {
-        $result = $this->getMockBuilder(mysqli_result::class)
-                       ->disableOriginalConstructor()
-                       ->getMock();
-        
-        $result->expects($this->any())
-               ->method('fetch_array')
-               ->willReturn(['name' => 'Brampton']);
-        
-        $this->assertEquals(['name' => 'Brampton'], $result->fetch_array());
+        $this->assertStringContainsString("<option value='Toronto'>Toronto</option>", $output);
+        $this->assertStringContainsString("<option value='Waterloo'>Waterloo</option>", $output);
     }
 }

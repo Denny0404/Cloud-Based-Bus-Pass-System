@@ -1,71 +1,54 @@
 <?php
+define('PHPUNIT_RUNNING', true);
+require_once 'billing.php';
+
 use PHPUnit\Framework\TestCase;
 
 class BillingTest extends TestCase {
-    private $mysqli;
 
-    protected function setUp(): void {
-        // Mock the database connection
-        $this->mysqli = $this->getMockBuilder(mysqli::class)
-                             ->disableOriginalConstructor()
-                             ->getMock();
+    public function testCalculateDaysFromToday() {
+        $futureDate = date('Y-m-d', strtotime('+10 days'));
+        $expectedDays = 11; // +1 from today
+        $actualDays = calculateDaysFromToday($futureDate);
+        $this->assertEquals($expectedDays, $actualDays);
     }
 
-    public function testDatabaseConnection() {
-        // Ensure the database connection is established
-        $this->assertNotNull($this->mysqli, "Database connection should not be null.");
+    public function testCalculateAmount() {
+        $price = 100;
+        $days = 5;
+        $expectedAmount = 500;
+        $actualAmount = calculateAmount($price, $days);
+        $this->assertEquals($expectedAmount, $actualAmount);
     }
 
-    public function testFormValidation() {
-        // Simulated form submission
-        $_POST = [
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
-            'contact' => '1234567890',
-            'password' => 'securepass',
-            'date' => '2025-05-05',
-            'dest' => 'Brampton'
-        ];
+    public function testGetPriceForDestination() {
+        $mockCon = $this->createMock(mysqli::class);
+        $mockStmt = $this->createMock(mysqli_stmt::class);
+        $mockResult = $this->createMock(mysqli_result::class);
 
-        $requiredFields = ['name', 'email', 'contact', 'password', 'date', 'dest'];
+        $mockCon->method('prepare')->willReturn($mockStmt);
+        $mockStmt->expects($this->once())->method('bind_param');
+        $mockStmt->method('execute')->willReturn(true);
+        $mockStmt->method('get_result')->willReturn($mockResult);
+        $mockResult->method('fetch_assoc')->willReturn(['price' => 120]);
 
-        foreach ($requiredFields as $field) {
-            $this->assertArrayHasKey($field, $_POST, "$field should exist in the form submission.");
-            $this->assertNotEmpty($_POST[$field], "$field should not be empty.");
-        }
+        $price = getPriceForDestination($mockCon, 'Delhi');
+        $this->assertEquals(120, $price);
     }
-
-    public function testPriceCalculation() {
-        // Simulate database result for price retrieval
-        $mockResult = $this->getMockBuilder(mysqli_result::class)
-                           ->disableOriginalConstructor()
-                           ->getMock();
-
-        $mockResult->expects($this->any())
-                   ->method('fetch_assoc')
-                   ->willReturn(['price' => 50]);
-
-        $nod = 10; // Simulated number of days
-        $price = 50; // Simulated price per day
-        $expectedAmount = $nod * $price;
-
-        $this->assertEquals(500, $expectedAmount, "Price calculation should be correct.");
+    public function testInsertPassReturnsId() {
+        // Fake connection object using anonymous class
+        $mockCon = new class {
+            public $insert_id = 7;
+            public function prepare($query) {
+                return new class {
+                    public function bind_param($types, ...$params) {}
+                    public function execute() { return true; }
+                };
+            }
+        };
+    
+        $insertedId = insertPass($mockCon, 'John', 'john@example.com', '9999999999', '2025-12-31', 'Delhi', 'pass123');
+        $this->assertEquals(7, $insertedId);
     }
-
-    public function testPaymentProcessing() {
-        // Simulate payment form submission
-        $_POST = [
-            'cardname' => 'John Doe',
-            'cardnumber' => '4556-5565-5544-5456',
-            'expmonth' => '08',
-            'expyear' => '2028',
-            'cvv' => '202'
-        ];
-
-        $this->assertNotEmpty($_POST['cardname'], "Card name should not be empty.");
-        $this->assertMatchesRegularExpression('/^\d{4}-\d{4}-\d{4}-\d{4}$/', $_POST['cardnumber'], "Card number format should be valid.");
-        $this->assertMatchesRegularExpression('/^\d{2}$/', $_POST['expmonth'], "Expiration month format should be valid.");
-        $this->assertMatchesRegularExpression('/^\d{4}$/', $_POST['expyear'], "Expiration year format should be valid.");
-        $this->assertMatchesRegularExpression('/^\d{3}$/', $_POST['cvv'], "CVV format should be valid.");
-    }
+    
 }

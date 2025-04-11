@@ -1,56 +1,63 @@
 <?php
+define('PHPUNIT_RUNNING', true);
+require_once 'renew.php';
 
 use PHPUnit\Framework\TestCase;
 
-class RenewTest extends TestCase
-{
+class RenewTest extends TestCase {
 
-    public function testRenewPassSuccess()
-    {
-        // Mock valid user ID and new date
-        $mockId = 12345;
-        $currentDate = "2025-05-01"; // Current valid date
-        $newDate = "2025-06-01"; // New extended date
+    public function testFetchPassByIdReturnsRow() {
+        $mockCon = $this->createMock(mysqli::class);
+        $mockStmt = $this->createMock(mysqli_stmt::class);
+        $mockResult = $this->createMock(mysqli_result::class);
 
-        // Simulate retrieved database row
-        $mockPassData = [
-            'id' => $mockId,
-            'date' => $currentDate,
-            'dest' => "Brampton"
+        $expected = [
+            'id' => 1,
+            'name' => 'Denish',
+            'date' => '2025-01-01',
+            'dest' => 'Mathura'
         ];
 
-        // Calculate expected number of days difference
-        $expectedNod = round((strtotime($newDate) - strtotime($mockPassData['date'])) / (60 * 60 * 24)) + 1;
+        $mockCon->method('prepare')->willReturn($mockStmt);
+        $mockStmt->method('bind_param')->willReturn(true);
+        $mockStmt->method('execute')->willReturn(true);
+        $mockStmt->method('get_result')->willReturn($mockResult);
+        $mockResult->method('fetch_assoc')->willReturn($expected);
 
-        // Simulate form input
-        $_POST['id'] = $mockId;
-        $_POST['new_date'] = $newDate;
-
-        // Simulated database update (mocking real SQL update)
-        $mockPassData['date'] = $newDate;
-
-        // Assertions
-        $this->assertEquals($newDate, $mockPassData['date'], "Pass expiry date should be updated.");
-        $this->assertGreaterThan(0, $expectedNod, "Number of days added should be greater than zero.");
-        $this->assertEquals(32, $expectedNod, "Expected days difference should be 32.");
+        $this->assertEquals($expected, fetchPassById($mockCon, 1));
     }
 
-    public function testInvalidDateInput()
-    {
-        // Simulate invalid date input
-        $_POST['id'] = 12345;
-        $_POST['new_date'] = ""; // Empty date
+    public function testUpdatePassDateReturnsTrue() {
+        $mockCon = $this->createMock(mysqli::class);
+        $mockStmt = $this->createMock(mysqli_stmt::class);
 
-        // Check that the system does not process an empty date
-        $this->assertEmpty($_POST['new_date'], "New date should not be empty.");
+        $mockCon->method('prepare')->willReturn($mockStmt);
+        $mockStmt->expects($this->once())->method('bind_param');
+        $mockStmt->expects($this->once())->method('execute')->willReturn(true);
+
+        $this->assertTrue(updatePassDate($mockCon, 1, '2025-12-31'));
     }
 
-    public function testMissingPassId()
-    {
-        // Simulate missing ID input
-        unset($_POST['id']);
+    public function testCalculateNewDays() {
+        $oldDate = '2025-01-01';
+        $newDate = '2025-01-11';
+        $expectedDays = 11;
 
-        // Check that the system does not process when ID is missing
-        $this->assertArrayNotHasKey('id', $_POST, "Pass ID should be required.");
+        $actualDays = calculateNewDays($oldDate, $newDate);
+        $this->assertEquals($expectedDays, $actualDays);
+    }
+
+    public function testFetchPriceForDestinationReturnsValue() {
+        $mockCon = $this->createMock(mysqli::class);
+        $mockStmt = $this->createMock(mysqli_stmt::class);
+        $mockResult = $this->createMock(mysqli_result::class);
+
+        $mockCon->method('prepare')->willReturn($mockStmt);
+        $mockStmt->method('bind_param')->willReturn(true);
+        $mockStmt->method('execute')->willReturn(true);
+        $mockStmt->method('get_result')->willReturn($mockResult);
+        $mockResult->method('fetch_assoc')->willReturn(['price' => 100]);
+
+        $this->assertEquals(100, fetchPriceForDestination($mockCon, 'Delhi'));
     }
 }
