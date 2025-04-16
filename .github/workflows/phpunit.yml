@@ -37,7 +37,7 @@ jobs:
         run: |
           vendor/bin/phpunit --testdox tests/BillingTest.php
           vendor/bin/phpunit --testdox tests/BookTest.php
-          # vendor/bin/phpunit --testdox tests/InvoiceTest.php
-          # vendor/bin/phpunit --testdox tests/ManageTest.php
-          # vendor/bin/phpunit --testdox tests/RenewTest.php
-          # vendor/bin/phpunit --testdox tests/SuspendTest.php
+          vendor/bin/phpunit --testdox tests/InvoiceTest.php
+          vendor/bin/phpunit --testdox tests/ManageTest.php
+          vendor/bin/phpunit --testdox tests/RenewTest.php
+          vendor/bin/phpunit --testdox tests/SuspendTest.php
