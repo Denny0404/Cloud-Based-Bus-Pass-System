@@ -9,7 +9,6 @@ session_start();
 	global $con;
 	$con = mysqli_connect ($servername , $username , $password, $db) or die("unable to connect to host or database");  
 
-
 	// Database credentials
 	// $servername = "localhost";
 	// $db = "u342955335_travel";

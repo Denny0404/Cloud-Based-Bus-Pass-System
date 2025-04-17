@@ -3,13 +3,11 @@
 if (!defined('PHPUNIT_RUNNING')) {
     include('connection.php');
 }
-
 // Function to fetch destination list from database
 function getDestinations($con) {
     $sql = "SELECT name FROM destination";
     return $con->query($sql);
 }
-
 // Function to generate <option> list for destination dropdown
 function printDestinationOptions($result) {
   if (!$result || !method_exists($result, 'fetch_array')) return;
@@ -18,8 +16,6 @@ function printDestinationOptions($result) {
       echo "<option value='" . $row['name'] . "'>" . $row['name'] . "</option>";
   }
 }
-
-
 // Run HTML only in normal browser mode (not during PHPUnit test)
 if (!defined('PHPUNIT_RUNNING')) {
     $destinationResult = getDestinations($con);
