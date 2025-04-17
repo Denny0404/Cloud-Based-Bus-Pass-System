@@ -874,7 +874,7 @@ h1, h2, h3, h4, h5,
     border-radius: 0 !important;
     font-weight: bold;
     color: #cccccc; }
-    
+
     .site-block-tab .nav-item > a:hover, .site-block-tab .nav-item > a.active {
       border-bottom: 2px solid #ef6c57;
       color: #000; }
@@ -932,6 +932,7 @@ h1, h2, h3, h4, h5,
   @media (min-width: 768px) {
     .slide-one-item.home-slider .owl-prev, .slide-one-item.home-slider .owl-next {
       font-size: 25px; } }
+
   .slide-one-item.home-slider .owl-prev > span, .slide-one-item.home-slider .owl-next > span {
     position: absolute;
     line-height: 0;
@@ -940,6 +941,7 @@ h1, h2, h3, h4, h5,
     -webkit-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%); }
+
   .slide-one-item.home-slider .owl-prev:hover, .slide-one-item.home-slider .owl-prev:focus, .slide-one-item.home-slider .owl-next:hover, .slide-one-item.home-slider .owl-next:focus {
     background: black; }
 
@@ -951,6 +953,7 @@ h1, h2, h3, h4, h5,
   position: relative; }
   .block-12 figure {
     position: relative; }
+
     .block-12 figure:before {
       content: '';
       position: absolute;
@@ -970,17 +973,21 @@ h1, h2, h3, h4, h5,
     left: 20px;
     right: 20px;
     z-index: 10; }
+
     .block-12 .text-overlay h2 {
       color: #fff; }
+
   .block-12 .text {
     position: relative;
     top: -100px; }
+
     .block-12 .text .meta {
       text-transform: uppercase;
       padding-left: 40px;
       color: #fff;
       display: block;
       margin-bottom: 20px; }
+
     .block-12 .text .text-inner {
       -webkit-box-shadow: 0 0 20px -5px rgba(0, 0, 0, 0.3);
       box-shadow: 0 0 20px -5px rgba(0, 0, 0, 0.3);
@@ -988,12 +995,15 @@ h1, h2, h3, h4, h5,
       padding: 10px;
       margin-right: 30px;
       position: relative; }
+
       @media (min-width: 576px) {
         .block-12 .text .text-inner {
           padding: 20px; } }
+
       @media (min-width: 768px) {
         .block-12 .text .text-inner {
           padding: 30px 40px; } }
+
       .block-12 .text .text-inner:before {
         position: absolute;
         content: "";
@@ -1002,6 +1012,7 @@ h1, h2, h3, h4, h5,
         margin-top: -4px;
         background: #ef6c57;
         top: 0; }
+
       .block-12 .text .text-inner .heading {
         font-size: 20px;
         margin: 0;
@@ -1026,6 +1037,7 @@ h1, h2, h3, h4, h5,
     color: #ef6c57 !important; }
     .block-16 figure .play-button:hover {
       opacity: 1; }
+      
     .block-16 figure .play-button > span {
       position: absolute;
       left: 55%;
