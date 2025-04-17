@@ -693,7 +693,7 @@ h1, h2, h3, h4, h5,
     margin-left: 5px;
     margin-right: 5px;
     color: #ccc; }
-    
+
   .podcast-entry .image {
     background-size: cover;
     background-position: center center;
@@ -818,6 +818,7 @@ h1, h2, h3, h4, h5,
     color: #ccc;
     font-weight: normal;
     letter-spacing: .15em; }
+
   .match-entry:hover {
     -webkit-transform: scale(1.05);
     -ms-transform: scale(1.05);
@@ -830,16 +831,20 @@ h1, h2, h3, h4, h5,
   position: relative;
   overflow: hidden;
   border: 1px solid #e6e6e6; }
+
   .post-entry, .post-entry .text {
     border-radius: 4px;
     border-top: none !important; }
+
   .post-entry .date {
     color: #ccc;
     font-weight: normal;
     letter-spacing: .1em; }
+
   .post-entry .image {
     overflow: hidden;
     position: relative; }
+
     .post-entry .image img {
       -webkit-transition: .3s all ease;
       -o-transition: .3s all ease;
@@ -847,6 +852,7 @@ h1, h2, h3, h4, h5,
       -webkit-transform: scale(1);
       -ms-transform: scale(1);
       transform: scale(1); }
+
   .post-entry:hover .image img, .post-entry:active .image img, .post-entry:focus .image img {
     -webkit-transform: scale(1.2);
     -ms-transform: scale(1.2);
@@ -856,8 +862,10 @@ h1, h2, h3, h4, h5,
   text-transform: uppercase;
   font-size: 0.8rem;
   margin: 0 20px; }
+
   .site-block-tab .nav-item:first-child {
     margin-left: 0 !important; }
+    
   .site-block-tab .nav-item > a {
     padding-left: 0 !important;
     background: none !important;
@@ -866,6 +874,7 @@ h1, h2, h3, h4, h5,
     border-radius: 0 !important;
     font-weight: bold;
     color: #cccccc; }
+    
     .site-block-tab .nav-item > a:hover, .site-block-tab .nav-item > a.active {
       border-bottom: 2px solid #ef6c57;
       color: #000; }
